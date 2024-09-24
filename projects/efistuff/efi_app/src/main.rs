@@ -319,28 +319,24 @@ fn main(image_handle: Handle, mut system_table: SystemTable<Boot>) -> Status {
     uefi::helpers::init(&mut system_table).unwrap();
     let boot_services = system_table.boot_services();
     let time = 100_000;
-    let mut i = 0;
-    while i == 100000 {
-        info!("{}",ASCII_ART_1);
-        boot_services.stall(time);
-        info!("{}",ASCII_ART_2);
-        boot_services.stall(time);
-        info!("{}",ASCII_ART_3);
-        boot_services.stall(time);
-        info!("{}",ASCII_ART_4);
-        boot_services.stall(time);
-        info!("{}",ASCII_ART_5);
-        boot_services.stall(time);
-        info!("{}",ASCII_ART_6);
-        boot_services.stall(time);
-        info!("{}",ASCII_ART_7);
-        boot_services.stall(time);
-        info!("{}",ASCII_ART_8);
-        boot_services.stall(time);
-        i = i + 1;
-    }
-
-
+while time == 100_000 {
+    info!("{}",ASCII_ART_1);
+    boot_services.stall(time);
+    info!("{}",ASCII_ART_2);
+    boot_services.stall(time);
+    info!("{}",ASCII_ART_3);
+    boot_services.stall(time);
+    info!("{}",ASCII_ART_4);
+    boot_services.stall(time);
+    info!("{}",ASCII_ART_5);
+    boot_services.stall(time);
+    info!("{}",ASCII_ART_6);
+    boot_services.stall(time);
+    info!("{}",ASCII_ART_7);
+    boot_services.stall(time);
+    info!("{}",ASCII_ART_8);
+    boot_services.stall(time);
+}
     boot_services.stall(10_000_000);
     Status::SUCCESS
 }
