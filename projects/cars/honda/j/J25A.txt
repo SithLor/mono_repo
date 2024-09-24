@@ -1,0 +1,9 @@
+https://en.wikipedia.org/wiki/Honda_J_engine#J25A
+
+displaced:2.5 L; 152.3 cu_in ;2,495 cc. 
+bore:86 mm (3.39 in)
+stroke:71.6 mm (2.82 in). 
+compression ratio:10.5:1
+VTEC:yes
+Type:SOHC
+Output was 200 hp (149 kW) at 6200 rpm and 24.5 kg⋅m (240 N⋅m; 177 lb⋅ft) of torque at 4600 rpm.

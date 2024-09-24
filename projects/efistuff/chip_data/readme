@@ -1,0 +1,5 @@
+to build custom chip 
+
+edit cofig for said type 
+* for type you pick
+run build_*.sh

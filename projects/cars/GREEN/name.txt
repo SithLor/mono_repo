@@ -1,0 +1,33 @@
+https://discourse.automationgame.com/t/engine-design-guide-complete-ish/25112/14
+HeadType
+    DOHC:Duel Overhead camshaft
+    DAOHC:Direct Acting Overhead Cam 
+    OHV:Overhead values or pushrod
+    SOHC:Overhead camshaft
+Fuelinjore
+    carb:
+        Single Barrel
+        Single Barrel Eco
+        2 Barrel
+        DCOE
+        4 Barrel
+        config:
+            twin carb
+            triple crab
+            quad crab
+            6 crab
+            8 carb
+    Fuel Injection:
+        Mechanical Fuel Injection
+        Single Point EFI
+        Multi Point EFI
+        Direct Injection 
+            config:
+                Single
+                Per cyclider
+
+
+fuel:
+    todo
+Fuel Mixture
+

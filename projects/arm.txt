@@ -1,0 +1,121 @@
+
+int test(int x,float y) {
+    return (int)x*y;
+}
+
+
+power64 gcc trunk -03:
+test(int, float):
+        .quad   .L.test(int, float),.TOC.@tocbase,0
+.L.test(int, float):
+        sradi 10,3,53
+        rldicl 9,3,0,53
+        addi 10,10,1
+        addi 9,9,2047
+        cmpldi 0,10,2
+        or 9,9,3
+        rldicr 9,9,0,52
+        bge 0,.L2
+        mr 9,3
+.L2:
+        std 9,-8(1)
+        addi 9,1,-16
+        ori 2,2,0
+        lfd 0,-8(1)
+        fcfid 12,0
+        frsp 0,12
+        fmuls 1,0,1
+        fctiwz 1,1
+        stfiwx 1,0,9
+        lwz 3,-16(1)
+        extsw 3,3
+        blr
+        .long 0
+        .byte 0,9,0,0,0,0,0,0
+powerpc64 clang (trunk) -03:
+test(int, float):                              # @test(int, float)
+        .quad   .Lfunc_begin0
+        .quad   .TOC.@tocbase
+        .quad   0
+.Lfunc_begin0:
+        std 3, -16(1)
+        addi 4, 1, -4
+        lfd 0, -16(1)
+        fcfid 0, 0
+        frsp 0, 0
+        fmuls 0, 0, 1
+        fctiwz 0, 0
+        stfiwx 0, 0, 4
+        lwa 3, -4(1)
+        blr
+        .long   0
+        .quad   0
+
+
+armv8-a clang 18.1.0 -03:
+test(int, float):  // @test(int, float)
+        scvtf   s1, w0
+        fmul    s0, s1, s0
+        fcvtzs  w0, s0
+        ret
+
+armv7-a clang 18.1.0 -O3:
+test(int, float):
+        push    {r4, lr}
+        mov     r4, r1
+        bl      __aeabi_i2f
+        mov     r1, r4
+        bl      __aeabi_fmul
+        bl      __aeabi_f2iz
+        pop     {r4, lr}
+        bx      lr
+ARM64 gcc 14.1.0 -03:
+test(int, float):
+        scvtf   s31, w0
+        fmul    s31, s31, s0
+        fcvtzs  w0, s31
+        ret
+TI C6x gcc 14.1.0 -03:
+test(int, float):
+                sub     .d2       B15, 16, B15
+                stw     .d2t2     B3, *+B15(16)
+                call    .s2     (__c6xabi_fltif)
+        ||      stw .d2t1     A10, *+B15(12)
+                mv      .l1x        B4, A10
+        ||      addkpc      .s2 .L3, B3, 0
+                nop     4
+                callp   .s2   (__c6xabi_mpyf), B3
+        ||      mv  .l2x        A10, B4
+                callp   .s2   (__c6xabi_fixfi), B3
+                ldw     .d2t2     *+B15(16), B3
+                ldw     .d2t1     *+B15(12), A10
+        ||      addk        .s2     16, B15
+                nop     3
+                ret     .s2       B3
+                nop     5
+SPARC64 gcc 14.1.0 -03:
+test(int, float):
+        add     %sp, -144, %sp
+        st      %o0, [%sp+2187]
+        ld      [%sp+2187], %f8
+        fitos   %f8, %f8
+        fmuls   %f8, %f3, %f3
+        fstoi   %f3, %f3
+        st      %f3, [%sp+2187]
+        ldsw    [%sp+2187], %o0
+        jmp     %o7+8
+         add    %sp, 144, %sp
+SPARC64 gcc 12.1.0 -03:
+test(int, float):
+        add     %sp, -80, %sp
+        st      %o0, [%sp+76]
+        ld      [%sp+76], %f8
+        st      %o1, [%sp+76]
+        fitos   %f8, %f8
+        ld      [%sp+76], %f9
+        fmuls   %f8, %f9, %f8
+        fstoi   %f8, %f8
+        st      %f8, [%sp+76]
+        ld      [%sp+76], %o0
+        jmp     %o7+8
+         add    %sp, 80, %sp

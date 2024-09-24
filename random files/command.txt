@@ -1,0 +1,2 @@
+force rust to be fast
+cargo rustc --release -- -Z tune-cpu=machine -C opt-level=3 -C overflow-checks=true -C strip=debuginfo -C target-cpu=native

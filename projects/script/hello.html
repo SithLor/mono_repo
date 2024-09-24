@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Page</title>
+    <script>
+        function testServer() {
+            const code = `#![no_std]\n#[no_mangle]\npub extern "C" fn add(a: u64, b: u64) -> u64 {a + b}`
+            const data = new Blob([" "], { type: 'text/plain' });
+            fetch('https://zany-enigma-gpgxq6qwqq5fr7w-8000.app.github.dev/create_function/hello_world', {
+                method: 'POST',
+                body: data
+            })
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('serverResponse').textContent = data;
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+        }
+    </script>
+</head>
+<body>
+    <h1>Server Test Page</h1>
+    <button onclick="testServer()">Test Server</button>
+    <h1 id="serverResponse"></h1>
+</body>
+</html>

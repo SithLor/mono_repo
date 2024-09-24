@@ -1,0 +1,1 @@
+https://help.sketchup.com/en/scan-essentials-sketchup/sample-point-cloud-data

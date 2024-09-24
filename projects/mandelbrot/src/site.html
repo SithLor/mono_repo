@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mandelbrot Set</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+        }
+        canvas {
+            border: 1px solid black;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="mandelbrotCanvas"></canvas>
+
+    <script>
+        // Render the Mandelbrot set. w and h are respectively the width and height of
+        // the output image.
+        function naive(w, h) {
+            const canvas = document.getElementById('mandelbrotCanvas');
+            canvas.width = w;
+            canvas.height = h;
+            const ctx = canvas.getContext('2d');
+            const imageData = ctx.createImageData(w, h);
+
+            for (let c = 0; c < w; c++) {
+                const x0 = (c / w) * 3.5 - 2.5;
+                for (let r = 0; r < h; r++) {
+                    const y0 = (r / h) * 2.0 - 1.0;
+                    let x = 0.0;
+                    let y = 0.0;
+                    let iteration = 0;
+                    while (x * x + y * y <= 4.0 && iteration < MAX_ITERATIONS) {
+                        const xTemp = x * x - y * y + x0;
+                        y = 2.0 * x * y + y0;
+                        x = xTemp;
+                        iteration++;
+                    }
+                    const color = getColor(iteration, MAX_ITERATIONS);
+                    const index = (r * w + c) * 4;
+                    imageData.data[index] = color[0];
+                    imageData.data[index + 1] = color[1];
+                    imageData.data[index + 2] = color[2];
+                    imageData.data[index + 3] = 255; // Alpha channel
+                }
+            }
+
+            ctx.putImageData(imageData, 0, 0);
+        }
+
+        // Function to map the number of iterations i to a rainbow color.
+        function getColor(i, maxIterations) {
+            if (i >= maxIterations) {
+                return [0, 0, 0]; // Black for points inside the set
+            }
+            const hue = (i / maxIterations) * 360; // Map iteration count to hue
+            return hslToRgb(hue, 100, 50);
+        }
+
+        // Function to convert HSL color to RGB
+        function hslToRgb(h, s, l) {
+            h /= 360;
+            s /= 100;
+            l /= 100;
+            let r, g, b;
+            if (s === 0) {
+                r = g = b = l; // Achromatic
+            } else {
+                const hue2rgb = (p, q, t) => {
+                    if (t < 0) t += 1;
+                    if (t > 1) t -= 1;
+                    if (t < 1/6) return p + (q - p) * 6 * t;
+                    if (t < 1/2) return q;
+                    if (t < 2/3) return p + (q - p) * (2/3 - t) * 6;
+                    return p;
+                };
+                const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+                const p = 2 * l - q;
+                r = hue2rgb(p, q, h + 1/3);
+                g = hue2rgb(p, q, h);
+                b = hue2rgb(p, q, h - 1/3);
+            }
+            return [Math.round(r * 255), Math.round(g * 255), Math.round(b * 255)];
+        }
+
+        // Example usage
+        const MAX_ITERATIONS = 5000; // or any other value you want
+        const width = 800; // Width of the output image
+        const height = 600; // Height of the output image
+        naive(width, height);
+    </script>
+</body>
+</html>
