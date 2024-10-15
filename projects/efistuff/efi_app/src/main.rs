@@ -318,6 +318,12 @@ use uefi::{Identify, Result};
 fn main(image_handle: Handle, mut system_table: SystemTable<Boot>) -> Status {
     uefi::helpers::init(&mut system_table).unwrap();
     let boot_services = system_table.boot_services();
+<<<<<<< HEAD
+
+    
+    print_image_path(boot_services).unwrap();
+
+=======
     let time = 100_000;
 while time == 100_000 {
     info!("{}",ASCII_ART_1);
@@ -337,6 +343,7 @@ while time == 100_000 {
     info!("{}",ASCII_ART_8);
     boot_services.stall(time);
 }
+>>>>>>> f014391e5279949dd1a3bead832a7a7ad00a46e3
     boot_services.stall(10_000_000);
     Status::SUCCESS
 }
